@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ali-deployment-test2
+  labels:
+    k8s-app: test-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: test-dep
+  template:
+    metadata:
+      labels:
+        k8s-app: test-dep
+    spec:
+      containers:
+      - name: mypod
+        image:  gitlab-registry.nrp-nautilus.io/smatous/ali-pytorch-tensorflow #gitlab-registry.nrp-nautilus.io/ramyf/pyssdata:latest
+        resources:
+          limits:
+            memory: 8Gi
+            cpu: "14"
+          requests:
+            cpu: "12"
+            memory: 4Gi
+        command: ["sh", "-c", "sleep infinity"]

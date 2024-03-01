@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata: 
+  name: ali-dem2so-job-3090-unetlight-ep1000-batch8-drop0
+spec:
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nvidia.com/gpu.product
+                operator: In
+                values:
+                - NVIDIA-GeForce-RTX-3090
+      containers:
+      - name: gpu-container
+        image: gitlab-registry.nrp-nautilus.io/smatous/rgbdem2so
+        command: ["/bin/bash", "-c"]
+        args: ["cd /root/home/; git clone https://github.com/SMATousi/dem2so.git; cd dem2so; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; python3 train_rgb.py --projectname RGB_DEM_2_SO --runname UnetLight_ep1000_batch16_drop0 --modelname Unet_light --batchsize 16 --epochs 1000 --nottest --logging --savingstep 100 --dropoutrate 0"]  
+        resources:
+          limits:
+            memory: 64Gi
+            cpu: 16
+            nvidia.com/gpu: 1
+          requests:
+            memory: 64Gi
+            cpu: 16
+            nvidia.com/gpu: 1
+      restartPolicy: Never

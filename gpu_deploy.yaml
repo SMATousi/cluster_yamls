@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ali-deploy-gpu-test
+  labels:
+    k8s-app: test-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: test-dep
+  template:
+    metadata:
+      labels:
+        k8s-app: test-dep
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: nvidia.com/gpu.product
+                    operator: In
+                    values:
+                    - NVIDIA-GeForce-RTX-3090
+      containers:
+      - name: mypod
+        image: gitlab-registry.nrp-nautilus.io/smatous/dem2so_large_dataset_2
+        resources:
+          limits:
+            memory: 8Gi
+            cpu: "52"
+            nvidia.com/gpu: "4"
+          requests:
+            cpu: "32"
+            memory: 4Gi
+            nvidia.com/gpu: "4"
+        command: ["sh", "-c", "sleep infinity"]

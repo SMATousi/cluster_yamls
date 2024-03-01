@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata: 
+  name: gully-64-gpu-unet-aug-job-l2-batch8-ep1000-ss-drop-1
+spec:
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nvidia.com/gpu.product
+                operator: In
+                values:
+                - NVIDIA-GeForce-RTX-3090
+      containers:
+      - name: gpu-container
+        image: gitlab-registry.nrp-nautilus.io/smatous/gully64
+        command: ["/bin/bash", "-c"]
+        args: ["cd /root/home/; pip install timm; pip install einops; git clone https://github.com/SMATousi/Unet_rgb_to_so.git; cd Unet_rgb_to_so; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; python3 run_train.py --projectname Gully_Detection_Target_Corrected_Choroid --runname Unet-1-BCMLoss-batch-8-ep1000-drop05-aug-L2-T01-2 --modelname Unet_1 --batchsize 8 --epochs 1000 --nottest"]  
+        resources:
+          limits:
+            memory: 64Gi
+            cpu: 16
+            nvidia.com/gpu: 1
+          requests:
+            memory: 64Gi
+            cpu: 16
+            nvidia.com/gpu: 1
+      restartPolicy: Never

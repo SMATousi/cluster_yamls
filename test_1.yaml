@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-cpu-ali-script-test2
+spec:
+  containers:
+  - name: cpu-container
+    image: gitlab-registry.nrp-nautilus.io/smatous/ali-pytorch-tensorflow
+    command: ["sleep", "infinity"]
+    resources:
+      limits:
+        memory: "16G"
+        cpu: "16"
+      requests:
+        memory: "16G"
+        cpu: "16"

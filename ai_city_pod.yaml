@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+    name: ali-pod-gpu-ai-city-pvc-test1
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+            - NVIDIA-GeForce-RTX-3090
+            - NVIDIA-A10
+  volumes:
+  - name: dshm
+    emptyDir:
+      medium: Memory
+  - name: data
+    persistentVolumeClaim:
+      claimName: ali-vol-100g
+  containers:
+  - name: gpu-container
+    image: gitlab-registry.nrp-nautilus.io/smatous/ai_city_ali:more_path
+    command: ["sleep", "infinity"]
+    resources:
+      limits:
+        memory: 32Gi
+        cpu: 16
+        nvidia.com/gpu: 1
+      requests:
+        memory: 32Gi
+        cpu: 16
+        nvidia.com/gpu: 1
+    volumeMounts:
+      - name: dshm
+        mountPath: /dev/shm
+      - name: data
+        mountPath: /root/home/test_data

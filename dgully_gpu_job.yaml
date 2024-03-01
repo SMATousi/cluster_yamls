@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata: 
+  name: gully-64-gpu-unet-job-batch8-ss-drop-3-detection-3
+spec:
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nvidia.com/gpu.product
+                operator: In
+                values:
+                - NVIDIA-GeForce-RTX-3090
+      containers:
+      - name: gpu-container
+        image: gitlab-registry.nrp-nautilus.io/smatous/gully-detection-128
+        command: ["/bin/bash", "-c"]
+        args: ["cd /root/home/; git clone https://github.com/SMATousi/Unet_RGB_to_Gully.git; cd Unet_RGB_to_Gully; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; python3 run_train_detection.py --projectname LSTM_Test_1 --runname first_try_batch2_hd512_noaug_d3 --modelname LSTM --batchsize 2 --epochs 1000 --nottest --savingstep 5 --dilationpixel 3"]  
+        resources:
+          limits:
+            memory: 64Gi
+            cpu: 16
+            nvidia.com/gpu: 1
+          requests:
+            memory: 64Gi
+            cpu: 16
+            nvidia.com/gpu: 1
+      restartPolicy: Never

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ali-cpu-raeproject-testing-pod-4
+spec:
+  containers:
+  - name: cpu-container
+    image: gitlab-registry.nrp-nautilus.io/smatous/ali-pytorch-tensorflow
+    command: ["sleep", "infinity"]
+    resources:
+      limits:
+        memory: "32G"
+        cpu: "8"
+      requests:
+        memory: "32G"
+        cpu: "8"

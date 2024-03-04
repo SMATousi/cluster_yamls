@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ali-dep-ai-city-2gpus-test1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: ali-dep-ai-city-2gpus-test1
+  template:
+    metadata: 
+      labels:
+        k8s-app: ali-dep-ai-city-2gpus-test1
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nvidia.com/gpu.product
+                operator: In
+                values:
+                - NVIDIA-GeForce-RTX-3090
+                - NVIDIA-A10
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+      - name: data
+        persistentVolumeClaim:
+          claimName: ali-vol-100g
+      containers:
+      - name: gpu-container
+        image: gitlab-registry.nrp-nautilus.io/smatous/ai_city_ali:more_path
+        command: ["sleep", "infinity"]
+        resources:
+          limits:
+            memory: 32Gi
+            cpu: 16
+            nvidia.com/gpu: 2
+          requests:
+            memory: 32Gi
+            cpu: 16
+            nvidia.com/gpu: 2
+        volumeMounts:
+          - name: dshm
+            mountPath: /dev/shm
+          - name: data
+            mountPath: /root/home/test_data

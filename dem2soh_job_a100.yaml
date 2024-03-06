@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: Job
+metadata: 
+  name: ali-a100-job-dem2so
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      tolerations:
+      - key: nautilus.io/mizzou-vigir
+        operator: Exists
+        effect: NoSchedule
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - gpn-fiona-mizzou-2.rnet.missouri.edu
+              - key: nvidia.com/gpu.product
+                operator: In
+                values:
+                - NVIDIA-A100-SXM4-80GB
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+      containers:
+      - name: gpu-container
+        image: gitlab-registry.nrp-nautilus.io/smatous/dem2so_large_dataset_2
+        command: ["/bin/bash", "-c"]
+        args: ["cd /root/home/data; pip install accelerate; tar -xvzf Archive.tar.gz; cd ..; git clone https://github.com/SMATousi/dem2so.git; cd dem2so; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; accelerate launch train_rgb_accel.py --epochs 1000 --modelname Unet_1 --batchsize 64 --nottest --logging --projectname RGB_DEM_2_SO --runname A100-Batch-128-Gradient-loss"]  
+        resources:
+          limits:
+            memory: 64Gi
+            cpu: 16
+            nvidia.com/gpu: 2
+          requests:
+            memory: 64Gi
+            cpu: 16
+            nvidia.com/gpu: 2
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+      restartPolicy: Never

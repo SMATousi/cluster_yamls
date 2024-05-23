@@ -25,16 +25,18 @@ spec:
       - name: gpu-container
         image: gitlab-registry.nrp-nautilus.io/smatous/dem2so_large_dataset_2
         command: ["/bin/bash", "-c"]
-        args: ["cd /root/home/data; pip install accelerate; tar -xvzf Archive.tar.gz; cd ..; git clone https://github.com/SMATousi/dem2so.git; cd dem2so; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; accelerate launch train_rgb_accel.py --epochs 1000 --modelname Unet_1 --batchsize 8 --nottest --logging --projectname RGB_DEM_2_SO --runname ExDATA-4GPUs-batch32-ukn"]  
+        args: ["cd /root/home/data; pip install accelerate; tar -xvzf Archive.tar.gz; cd ..; git clone https://github.com/SMATousi/dem2so.git; cd dem2so; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; accelerate launch train_rgb_accel.py --epochs 1000 --modelname Unet_1 --batchsize 8 --nottest --logging --projectname RGB_DEM_2_SO_New_Loss --runname 4GPU-batch64-baseline"]  
         resources:
           limits:
             memory: 64Gi
             cpu: 16
             nvidia.com/gpu: 4
+            ephemeral-storage: "500G"
           requests:
             memory: 64Gi
             cpu: 16
             nvidia.com/gpu: 4
+            ephemeral-storage: "500G"
         volumeMounts:
         - name: dshm
           mountPath: /dev/shm

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata: 
-    name: ali-pod-gpu-a10-test3
+    name: ali-pod-gpu-a10-test4
 spec:
   affinity:
     nodeAffinity:
@@ -25,12 +25,12 @@ spec:
       limits:
         memory: 32Gi
         cpu: 16
-        nvidia.com/gpu: 1
+        nvidia.com/gpu: 2
         ephemeral-storage: "1000G"
       requests:
         memory: 32Gi
         cpu: 16
-        nvidia.com/gpu: 1
+        nvidia.com/gpu: 2
         ephemeral-storage: "1000G"
     volumeMounts:
       - name: dshm

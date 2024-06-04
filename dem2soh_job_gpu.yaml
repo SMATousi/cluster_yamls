@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata: 
-  name: ali-job-dem2so-4gpus-batch8-test-3
+  name: ali-job-dem2so-4gpus-batch8-a1-b1
 spec:
   template:
     spec:
@@ -13,6 +13,8 @@ spec:
               - key: nvidia.com/gpu.product
                 operator: In
                 values:
+                - NVIDIA-A10
+                - NVIDIA-A6000
                 - NVIDIA-GeForce-RTX-3090
                 - NVIDIA-GeForce-RTX-2080-Ti
                 - NVIDIA-TITAN-RTX
@@ -25,18 +27,18 @@ spec:
       - name: gpu-container
         image: gitlab-registry.nrp-nautilus.io/smatous/dem2so_large_dataset_2
         command: ["/bin/bash", "-c"]
-        args: ["cd /root/home/data; pip install accelerate; tar -xvzf Archive.tar.gz; cd ..; git clone https://github.com/SMATousi/dem2so.git; cd dem2so; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; accelerate launch train_rgb_accel.py --epochs 1000 --modelname Unet_1 --batchsize 8 --nottest --logging --projectname RGB_DEM_2_SO_New_Loss --runname 4GPU-batch64-baseline"]  
+        args: ["cd /root/home/data; pip install rasterio; pip install gudhi; pip install accelerate; tar -xvzf Archive.tar.gz; cd ..; git clone https://github.com/SMATousi/dem2so.git; cd dem2so; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; accelerate launch train_rgb_accel.py --epochs 1000 --modelname Unet_1 --nottest --logging --projectname RGB_DEM_2_SO_New_Loss  --batchsize 16 --alpha 1 --beta 1 --runname clDice-4GPU-batch64-alpha1-beta1"]  
         resources:
           limits:
             memory: 64Gi
             cpu: 16
             nvidia.com/gpu: 4
-            ephemeral-storage: "500G"
+            ephemeral-storage: "1000G"
           requests:
             memory: 64Gi
             cpu: 16
             nvidia.com/gpu: 4
-            ephemeral-storage: "500G"
+            ephemeral-storage: "1000G"
         volumeMounts:
         - name: dshm
           mountPath: /dev/shm

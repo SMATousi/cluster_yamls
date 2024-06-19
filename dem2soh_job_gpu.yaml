@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata: 
-  name: ali-job-dem2so-4gpus-batch8-a1-b1
+  name: ali-job-dem2so-onet-4gpus-batch8-bce-1
 spec:
   template:
     spec:
@@ -27,7 +27,7 @@ spec:
       - name: gpu-container
         image: gitlab-registry.nrp-nautilus.io/smatous/dem2so_large_dataset_2
         command: ["/bin/bash", "-c"]
-        args: ["cd /root/home/data; pip install rasterio; pip install gudhi; pip install accelerate; tar -xvzf Archive.tar.gz; cd ..; git clone https://github.com/SMATousi/dem2so.git; cd dem2so; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; accelerate launch train_rgb_accel.py --epochs 1000 --modelname Unet_1 --nottest --logging --projectname RGB_DEM_2_SO_New_Loss  --batchsize 16 --alpha 1 --beta 1 --runname clDice-4GPU-batch64-alpha1-beta1"]  
+        args: ["cd /root/home/data; pip install rasterio; pip install gudhi; pip install accelerate; tar -xvzf Archive.tar.gz; cd ..; git clone https://github.com/SMATousi/dem2so.git; cd dem2so; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; accelerate launch train_rgb_accel.py --epochs 1000 --modelname Onet --nottest --logging --projectname RGB_DEM_2_SO_New_Loss  --batchsize 16 --alpha 1 --beta 0.5 --runname Onet-BCE-4GPU-batch64"]  
         resources:
           limits:
             memory: 64Gi

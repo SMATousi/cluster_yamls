@@ -25,7 +25,7 @@ spec:
           medium: Memory
       containers:
       - name: gpu-container
-        image: gitlab-registry.nrp-nautilus.io/smatous/dem2so_large_dataset_2
+        image: gitlab-registry.nrp-nautilus.io/smatous/gully_classification:latest
         command: ["/bin/bash", "-c"]
         args: ["cd /root/home/data; pip install rasterio; pip install gudhi; pip install accelerate; tar -xvzf Archive.tar.gz; cd ..; git clone https://github.com/SMATousi/dem2so.git; cd dem2so; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; accelerate launch train_justrgb_accel.py --epochs 1000 --modelname Onet --nottest --logging --projectname RGB_DEM_2_SO_Compare  --batchsize 16 --alpha 1 --beta 0.5 --runname Onet-RGB-Batch64-2"]  
         resources:

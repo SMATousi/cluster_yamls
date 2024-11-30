@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: a100-deployment-for-wacv
+  labels:
+    k8s-app: test-pod #-${modelno}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: test-pod #-${modelno}
+  template:
+    metadata:
+      labels:
+        k8s-app: test-pod #-${modelno}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                    - gpn-fiona-mizzou-3.rnet.missouri.edu 
+      tolerations:
+        - key: nautilus.io/mizzou-vigir
+          operator: Exists
+          effect: NoSchedule
+      containers:
+        - name: mypod
+          image: gitlab-registry.nrp-nautilus.io/smatous/ollama_datasets:collage
+          resources:
+            limits:
+              memory: "32Gi"
+              cpu: "16"
+              nvidia.com/a100: 1
+            requests:
+              memory: "32Gi"
+              cpu: "16"
+              nvidia.com/a100: 1
+          volumeMounts:
+            - name: my-storage
+              mountPath: /mnt
+          command: ["/bin/sh", "-c"]
+          args: ["  echo 'Starting'; sleep infinity;"]
+      restartPolicy: Always
+      volumes:
+        - name: my-storage
+          persistentVolumeClaim:
+            claimName: my-claim8

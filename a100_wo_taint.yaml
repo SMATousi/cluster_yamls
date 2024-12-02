@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ali-a100-deployment-gully
+  labels:
+    app: test-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-deployment
+  template:
+    metadata:
+      labels:
+        app: test-deployment
+    spec:
+      containers:
+      - name: mypod
+        image: gitlab-registry.nrp-nautilus.io/smatous/ollama_datasets:collage
+        resources:
+          limits:
+            memory: "32Gi"
+            cpu: "32"
+            nvidia.com/a100: 2
+          requests:
+            memory: "32Gi"
+            cpu: "32"
+            nvidia.com/a100: 2
+        command: ["/bin/sh", "-c"]
+        args: ["sleep infinity"]

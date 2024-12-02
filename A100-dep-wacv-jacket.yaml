@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: a100-deployment-for-wacv
+  name: a100-deployment-for-gully-ws-2gpua
   labels:
     k8s-app: test-pod #-${modelno}
 spec:
@@ -29,16 +29,16 @@ spec:
           effect: NoSchedule
       containers:
         - name: mypod
-          image: gitlab-registry.nrp-nautilus.io/smatous/ollama_datasets:collage
+          image: gitlab-registry.nrp-nautilus.io/smatous/ollama_datasets:gully_ws_true
           resources:
             limits:
               memory: "32Gi"
               cpu: "16"
-              nvidia.com/a100: 1
+              nvidia.com/a100: 2
             requests:
               memory: "32Gi"
               cpu: "16"
-              nvidia.com/a100: 1
+              nvidia.com/a100: 2
           volumeMounts:
             - name: my-storage
               mountPath: /mnt
@@ -48,4 +48,4 @@ spec:
       volumes:
         - name: my-storage
           persistentVolumeClaim:
-            claimName: my-claim8
+            claimName: ali-vol-500g

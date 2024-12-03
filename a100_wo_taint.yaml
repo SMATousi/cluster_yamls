@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mypod
-        image: gitlab-registry.nrp-nautilus.io/smatous/ollama_datasets:collage
+        image: gitlab-registry.nrp-nautilus.io/smatous/ollama_datasets:gully_ws_true
         resources:
           limits:
             memory: "32Gi"

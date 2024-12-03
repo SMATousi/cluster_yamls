@@ -19,7 +19,7 @@ spec:
       medium: Memory
   containers:
   - name: gpu-container
-    image: gitlab-registry.nrp-nautilus.io/smatous/dem2so_large_dataset_2
+    image: gitlab-registry.nrp-nautilus.io/smatous/ollama_datasets:gully_ws_true
     command: ["sleep", "infinity"]
     resources:
       limits:

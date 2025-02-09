@@ -1,16 +1,9 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: ali-unimatch-dep-test
+apiVersion: batch/v1
+kind: Job
+metadata: 
+  name: ${job_name}
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      k8s-app: ali-unimatch-dep-092-1
   template:
-    metadata: 
-      labels:
-        k8s-app: ali-unimatch-dep-092-1
     spec:
       affinity:
         nodeAffinity:
@@ -20,31 +13,29 @@ spec:
               - key: nvidia.com/gpu.product
                 operator: In
                 values:
-                # - NVIDIA-GeForce-RTX-3090
                 - NVIDIA-A10
-                - NVIDIA-A6000
+                - NVIDIA-GeForce-RTX-3090
       volumes:
       - name: dshm
         emptyDir:
           medium: Memory
-      - name: data
-        persistentVolumeClaim:
-          claimName: ali-vol-100g
       containers:
       - name: gpu-container
         image: gitlab-registry.nrp-nautilus.io/smatous/unimatch_vigir:pascal
-        command: ["sleep", "infinity"]
+        command: ["/bin/bash", "-c"]
+        args: ["cd /root/home/; git clone https://github.com/SMATousi/UnimatchV2_ViGIR.git; mv pretrained UnimatchV2_ViGIR/; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; cd UnimatchV2_ViGIR/; sh scripts/train_arguments.sh 1 8080 ${meth}_${size} Unimatch_RAE_366_pascal_final 366 ${size} ${meth} pascal"]  
         resources:
           limits:
             memory: 8Gi
             cpu: 4
             nvidia.com/gpu: 1
+            ephemeral-storage: "1000G"
           requests:
             memory: 8Gi
             cpu: 4
             nvidia.com/gpu: 1
+            ephemeral-storage: "1000G"
         volumeMounts:
-          - name: dshm
-            mountPath: /dev/shm
-          - name: data
-            mountPath: /root/home/test_data
+        - name: dshm
+          mountPath: /dev/shm
+      restartPolicy: Never

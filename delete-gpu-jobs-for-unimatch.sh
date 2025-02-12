@@ -19,7 +19,10 @@ seed_start=1
 seed_end=5
 seed_variation=1
 
-model_size=('dino_small' 'dino_base' 'dino_large')
+model_size=(
+  # 'dino_small' 
+  # 'dino_base' 
+  'dino_large')
 
 method=('unimatch_v2_wandb_wo_FA_normloss_gradient'
         'unimatch_v2_wandb_gradient' 

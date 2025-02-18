@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ali-unimatch-dep-test
+  name: ali-dep-test
 spec:
   replicas: 1
   selector:
@@ -32,7 +32,7 @@ spec:
           claimName: ali-vol-100g
       containers:
       - name: gpu-container
-        image: gitlab-registry.nrp-nautilus.io/smatous/unimatch_vigir:pascal
+        image: gitlab-registry.nrp-nautilus.io/smatous/ollama_datasets:cars_air_traf
         command: ["sleep", "infinity"]
         resources:
           limits:

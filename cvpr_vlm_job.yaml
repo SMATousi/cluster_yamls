@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata: 
-  name: ali-cvpr-test-1
+  name: cvpr-traffic-${model}-${split}
 spec:
   template:
     spec:
@@ -14,7 +14,7 @@ spec:
                 operator: In
                 values:
                 - NVIDIA-A10
-                # - NVIDIA-A6000
+                - NVIDIA-A6000
                   #- NVIDIA-GeForce-RTX-3090
       volumes:
       - name: dshm
@@ -24,7 +24,7 @@ spec:
       - name: gpu-container
         image: gitlab-registry.nrp-nautilus.io/smatous/ollama_datasets:cars_air_traf
         command: ["/bin/bash", "-c"]
-        args: ["ollama serve &; sleep 10; cd /root/home/; pip install transformers; git clone https://github.com/SMATousi/ViGIR_CVPR_LLM.git; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; cd ViGIR_CVPR_LLM/prompting_framework/; python run_traffic.py --base_dir /root/home/data/traffic/ --model_name llava:7b --prompt 'Identify the traffic sign. Choose one from the list' --dataset_name traffic --data_path /root/home/data/traffic/images/ --data_samples /root/home/data/traffic/annotations/traffic_signs_train.json --subset train --timeout 20 --results_dir /root/home/data/traffic/results/"] 
+        args: ["cd /root/home/; pip install transformers; git clone https://github.com/SMATousi/ViGIR_CVPR_LLM.git; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; cd ViGIR_CVPR_LLM/prompting_framework/; ollama serve & sleep 10; python run_traffic.py --base_dir /root/home/data/traffic/ --model_name ${model} --prompt 'Identify the traffic sign. Choose one from the list' --dataset_name traffic --data_path /root/home/data/traffic/images/ --data_samples /root/home/data/traffic/annotations/traffic_signs_train.json --subset ${split} --timeout 20 --results_dir /root/home/data/traffic/results/"] 
         resources:
           limits:
             memory: 8Gi

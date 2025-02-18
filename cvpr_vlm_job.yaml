@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata: 
-  name: cvpr-test-1
+  name: ali-cvpr-test-1
 spec:
   template:
     spec:
@@ -14,9 +14,8 @@ spec:
                 operator: In
                 values:
                 - NVIDIA-A10
-                - NVIDIA L4
-                - NVIDIA-A6000
-                - NVIDIA-GeForce-RTX-3090
+                # - NVIDIA-A6000
+                  #- NVIDIA-GeForce-RTX-3090
       volumes:
       - name: dshm
         emptyDir:
@@ -25,18 +24,18 @@ spec:
       - name: gpu-container
         image: gitlab-registry.nrp-nautilus.io/smatous/ollama_datasets:cars_air_traf
         command: ["/bin/bash", "-c"]
-        args: ["cd /root/home/; pip install transformers; https://github.com/SMATousi/ViGIR_CVPR_LLM.git; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; cd ViGIR_CVPR_LLM/prompting_framework/; python run_traffic.py --base_dir /root/home/data/traffic/ --model_name llava:7b --prompt 'Identify the traffic sign. Choose one from the list' --dataset_name traffic --data_path /root/home/data/traffic/images/ --data_samples /root/home/data/traffic/annotations/traffic_signs_train.json --subset train --timeout 20 --results_dir /root/home/data/traffic/results/"] 
+        args: ["ollama serve &; sleep 10; cd /root/home/; pip install transformers; git clone https://github.com/SMATousi/ViGIR_CVPR_LLM.git; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; cd ViGIR_CVPR_LLM/prompting_framework/; python run_traffic.py --base_dir /root/home/data/traffic/ --model_name llava:7b --prompt 'Identify the traffic sign. Choose one from the list' --dataset_name traffic --data_path /root/home/data/traffic/images/ --data_samples /root/home/data/traffic/annotations/traffic_signs_train.json --subset train --timeout 20 --results_dir /root/home/data/traffic/results/"] 
         resources:
           limits:
-            memory: 16Gi
+            memory: 8Gi
             cpu: 4
             nvidia.com/gpu: 1
-            ephemeral-storage: "50G"
+            ephemeral-storage: "1000G"
           requests:
-            memory: 16Gi
+            memory: 8Gi
             cpu: 4
             nvidia.com/gpu: 1
-            ephemeral-storage: "50G"
+            ephemeral-storage: "1000G"
         volumeMounts:
         - name: dshm
           mountPath: /dev/shm

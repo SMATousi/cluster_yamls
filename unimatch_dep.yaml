@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ali-dep-test
+  name: ali-dep-test-2
 spec:
   replicas: 1
   selector:
@@ -36,12 +36,12 @@ spec:
         command: ["sleep", "infinity"]
         resources:
           limits:
-            memory: 4Gi
-            cpu: 2
+            memory: 8Gi
+            cpu: 4
             nvidia.com/gpu: 1
           requests:
-            memory: 4Gi
-            cpu: 2
+            memory: 8Gi
+            cpu: 4
             nvidia.com/gpu: 1
         volumeMounts:
           - name: dshm

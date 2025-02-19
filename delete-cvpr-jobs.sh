@@ -5,7 +5,10 @@
 # seed_end=5
 # seed_variation=1
 
-splits=('train' 'test')
+splits=(
+        # 'train' 
+        'test'
+        )
 
 models=('llava:7b' 
         'llava:13b' 
@@ -33,7 +36,8 @@ for split in "${splits[@]}"; do
       # Remove any leading or trailing dashes (ensures valid RFC 1123 name)
       job_name_l=$(echo "$job_name_l" | sed 's/^-*//;s/-*$//')
 
-      job_name="cvpr-traffic-${job_name_l}-${split}"
+      # job_name="cvpr-traffic-${job_name_l}-${split}"
+      job_name="cvpr-aircraft-${job_name_l}-${split}"
       # job_name="${job_name,,}"
       # Use environment variables in your job template and apply it
       # envsubst < unimatch_job.yaml | kubectl apply -f -

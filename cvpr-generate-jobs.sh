@@ -5,9 +5,14 @@
 # seed_end=5
 # seed_variation=1
 
-splits=('train' 'test')
+splits=(
+        'train' 
+        'val'
+        'test'
+        )
 
-models=('llava:7b' 
+models=(
+        'llava:7b' 
         'llava:13b' 
         'llava:34b' 
         'llava-llama3' 
@@ -15,7 +20,7 @@ models=('llava:7b'
         'minicpm-v' 
         'llava-phi3'
         'llama3.2-vision:11b'
-        #'moondream'
+        'moondream'
         )
 
 # Create jobs for each value in the range of seeds, model sizes, and methods
@@ -34,6 +39,6 @@ for split in "${splits[@]}"; do
       export job_name
 
       # Use environment variables in your job template and apply it
-      envsubst < cvpr_vlm_job.yaml | kubectl apply -f -
+      envsubst < cvpr_vlm_aircraft_job.yaml | kubectl apply -f -
   done
 done

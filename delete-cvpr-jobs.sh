@@ -14,7 +14,7 @@ models=('llava:7b'
         'bakllava' 
         'minicpm-v' 
         'llava-phi3'
-        'llama3.2-vision:13b'
+        'llama3.2-vision:11b'
         'moondream')
 
 # Create jobs for each value in the range of seeds, model sizes, and methods
@@ -27,7 +27,13 @@ for split in "${splits[@]}"; do
       # export job_name="${meth//_/-}-${size//_/-}-${seed}"  # Only replace underscores in the method part of the job_name
       # export job_name="${job_name,,}"
 
-      job_name="cvpr-traffic-${model}-${split}"  # Only replace underscores in the method part of the job_name
+        # Only replace underscores in the method part of the job_name
+      job_name_l=$(echo "$model" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g')
+
+      # Remove any leading or trailing dashes (ensures valid RFC 1123 name)
+      job_name_l=$(echo "$job_name_l" | sed 's/^-*//;s/-*$//')
+
+      job_name="cvpr-traffic-${job_name_l}-${split}"
       # job_name="${job_name,,}"
       # Use environment variables in your job template and apply it
       # envsubst < unimatch_job.yaml | kubectl apply -f -

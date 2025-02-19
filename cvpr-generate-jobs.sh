@@ -14,8 +14,9 @@ models=('llava:7b'
         'bakllava' 
         'minicpm-v' 
         'llava-phi3'
-        'llama3.2-vision:13b'
-        'moondream')
+        'llama3.2-vision:11b'
+        #'moondream'
+        )
 
 # Create jobs for each value in the range of seeds, model sizes, and methods
 for split in "${splits[@]}"; do
@@ -23,9 +24,14 @@ for split in "${splits[@]}"; do
 
       export split="$split"
       export model="$model"
-      # export meth="$meth"
-      # export job_name="${meth//_/-}-${size//_/-}-${seed}"  # Only replace underscores in the method part of the job_name
-      # export job_name="${job_name,,}"
+
+      # Convert model name to lowercase and replace all invalid characters with '-'
+      job_name=$(echo "$model" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g')
+
+      # Remove any leading or trailing dashes (ensures valid RFC 1123 name)
+      job_name=$(echo "$job_name" | sed 's/^-*//;s/-*$//')
+
+      export job_name
 
       # Use environment variables in your job template and apply it
       envsubst < cvpr_vlm_job.yaml | kubectl apply -f -

@@ -7,7 +7,7 @@
 
 splits=(
         'train' 
-        'val'
+        # 'val'
         'test'
         )
 
@@ -17,7 +17,7 @@ models=(
         'llava:34b' 
         'llava-llama3' 
         'bakllava' 
-        'minicpm-v' 
+        # 'minicpm-v' 
         'llava-phi3'
         'llama3.2-vision:11b'
         'moondream'
@@ -39,6 +39,6 @@ for split in "${splits[@]}"; do
       export job_name
 
       # Use environment variables in your job template and apply it
-      envsubst < cvpr_vlm_aircraft_job.yaml | kubectl apply -f -
+      envsubst < cvpr_vlm_cars_job.yaml | kubectl apply -f -
   done
 done

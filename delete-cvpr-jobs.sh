@@ -6,7 +6,8 @@
 # seed_variation=1
 
 splits=(
-        # 'train' 
+        'train' 
+        'val'
         'test'
         )
 

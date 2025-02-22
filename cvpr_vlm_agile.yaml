@@ -1,16 +1,9 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: ali-dep-test-3
+apiVersion: batch/v1
+kind: Job
+metadata: 
+  name: cvpr-${job_name}-${split}-${dataset_name}
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      k8s-app: ali-unimatch-dep-092-1
   template:
-    metadata: 
-      labels:
-        k8s-app: ali-unimatch-dep-092-1
     spec:
       affinity:
         nodeAffinity:
@@ -20,32 +13,32 @@ spec:
               - key: nvidia.com/gpu.product
                 operator: In
                 values:
+                - NVIDIA-L4
                 - NVIDIA-GeForce-RTX-3090
                 - NVIDIA-A10
                 - NVIDIA-A6000
-                - NVIDIA-L4
+                  #- NVIDIA-GeForce-RTX-3090
       volumes:
       - name: dshm
         emptyDir:
           medium: Memory
-      - name: data
-        persistentVolumeClaim:
-          claimName: ali-vol-100g
       containers:
       - name: gpu-container
         image: gitlab-registry.nrp-nautilus.io/smatous/ollama_datasets:cars_air_traf
-        command: ["sleep", "infinity"]
+        command: ["/bin/bash", "-c"]
+        args: ["cd /root/home/; pip install transformers; git clone https://github.com/SMATousi/ViGIR_CVPR_LLM.git; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; cd ViGIR_CVPR_LLM/prompting_framework/; ollama serve & sleep 10; python run_agile_datasets.py --model_name ${model} --dataset_name ${dataset_name} --subset ${split}"] 
         resources:
           limits:
-            memory: 8Gi
+            memory: 16Gi
             cpu: 8
             nvidia.com/gpu: 1
+            ephemeral-storage: "1000G"
           requests:
-            memory: 8Gi
+            memory: 16Gi
             cpu: 8
             nvidia.com/gpu: 1
+            ephemeral-storage: "1000G"
         volumeMounts:
-          - name: dshm
-            mountPath: /dev/shm
-          - name: data
-            mountPath: /root/home/test_data
+        - name: dshm
+          mountPath: /dev/shm
+      restartPolicy: Never

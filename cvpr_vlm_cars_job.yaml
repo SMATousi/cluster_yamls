@@ -27,13 +27,13 @@ spec:
         args: ["cd /root/home/; pip install transformers; git clone https://github.com/SMATousi/ViGIR_CVPR_LLM.git; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; cd ViGIR_CVPR_LLM/prompting_framework/; ollama serve & sleep 10; python run_cars_CLIP_debugged.py --model_name ${model} --prompt 'Your task is to identify the make and model of this car from the class list. Your answer MUST be less than 77 characters.' --subset ${split}"] 
         resources:
           limits:
-            memory: 8Gi
-            cpu: 4
+            memory: 16Gi
+            cpu: 8
             nvidia.com/gpu: 1
             ephemeral-storage: "1000G"
           requests:
-            memory: 8Gi
-            cpu: 4
+            memory: 16Gi
+            cpu: 8
             nvidia.com/gpu: 1
             ephemeral-storage: "1000G"
         volumeMounts:

@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata: 
-  name: ali-job-dem2so-onet-rgb-64-1
+  name: ali-job-gd-freezed-pretrained-rand-embed-05-batch64
 spec:
   template:
     spec:
@@ -15,28 +15,28 @@ spec:
                 values:
                 - NVIDIA-A10
                 - NVIDIA-A6000
-                - NVIDIA-GeForce-RTX-3090
-                - NVIDIA-GeForce-RTX-2080-Ti
-                - NVIDIA-TITAN-RTX
-                - NVIDIA-RTX-A5000
+                # - NVIDIA-GeForce-RTX-3090
+                # - NVIDIA-GeForce-RTX-2080-Ti
+                # - NVIDIA-TITAN-RTX
+                # - NVIDIA-RTX-A5000
       volumes:
       - name: dshm
         emptyDir:
           medium: Memory
       containers:
       - name: gpu-container
-        image: gitlab-registry.nrp-nautilus.io/smatous/gully_classification:latest
+        image: gitlab-registry.nrp-nautilus.io/smatous/gully_classification:224
         command: ["/bin/bash", "-c"]
-        args: ["cd /root/home/data; pip install rasterio; pip install gudhi; pip install accelerate; tar -xvzf Archive.tar.gz; cd ..; git clone https://github.com/SMATousi/dem2so.git; cd dem2so; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; accelerate launch train_justrgb_accel.py --epochs 1000 --modelname Onet --nottest --logging --projectname RGB_DEM_2_SO_Compare  --batchsize 16 --alpha 1 --beta 0.5 --runname Onet-RGB-Batch64-2"]  
+        args: ["cd /root/home/data; pip install transformers; pip install rasterio; pip install gudhi; pip install accelerate; tar -xvzf Archive_224.tar; cd ..; git clone https://github.com/SMATousi/Gully_Detection.git; cd Gully_Detection/gully_detection/; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; accelerate launch vit_train_rgb_accel_kfold.py --projectname GD_ViT --runname ViT-224-freezed-rand-embed-05-batch64 --batchsize 16 --nottest --logging --init_embed --freeze_weight"]  
         resources:
           limits:
             memory: 64Gi
-            cpu: 16
+            cpu: 8
             nvidia.com/gpu: 4
             ephemeral-storage: "1000G"
           requests:
             memory: 64Gi
-            cpu: 16
+            cpu: 8
             nvidia.com/gpu: 4
             ephemeral-storage: "1000G"
         volumeMounts:

@@ -20,7 +20,7 @@ spec:
       medium: Memory
   containers:
   - name: gpu-container
-    image: gitlab-registry.nrp-nautilus.io/smatous/gully_classification:latest
+    image: gitlab-registry.nrp-nautilus.io/smatous/gully_classification:224
     command: ["sleep", "infinity"]
     resources:
       limits:

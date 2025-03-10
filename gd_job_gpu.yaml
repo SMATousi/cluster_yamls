@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata: 
-  name: ali-gd-lp-4-100-100
+  name: ali-gd-lp-4-10-100-32-10
 spec:
   template:
     spec:
@@ -27,7 +27,7 @@ spec:
       - name: gpu-container
         image: gitlab-registry.nrp-nautilus.io/smatous/gully_classification:224
         command: ["/bin/bash", "-c"]
-        args: ["cd /root/home/data; pip install transformers; pip install rasterio; pip install gudhi; pip install accelerate; tar -xvzf Archive_224.tar; cd ..; git clone https://github.com/SMATousi/Gully_Detection.git; cd Gully_Detection/gully_detection/; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; accelerate launch vit_pretrain_lp_kfold.py --projectname GD_ViT --runname ViT-224-pretraining-lp-100-100-4 --batchsize 8 --freeze_weight --pret_epochs 100 --lp_epochs 100 --nottest --logging"]  
+        args: ["cd /root/home/data; pip install transformers; tar -xvzf Archive_224.tar; cd ..; git clone https://github.com/SMATousi/Gully_Detection.git; cd Gully_Detection/gully_detection/; export WANDB_API_KEY=5f0550a5efaee6dacd932e9d1178f33022ed081b; accelerate launch vit_pretrain_lp_kfold.py --projectname GD_ViT_final --runname ViT-224-pretraining-lp-10-100-32-10 --batchsize 8 --freeze_weight --pret_epochs 10 --lp_epochs 100 --nottest --logging --split_ratio 0.10"]  
         resources:
           limits:
             memory: 64Gi

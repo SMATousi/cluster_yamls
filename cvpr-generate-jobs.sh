@@ -7,17 +7,17 @@
 
 datasets=(
         # 'arts-and-crafts'
-        'astronaut'
-        'block-tower'
-        'dance'
-        'emergency-service'
-        'gourmet-tuna'
-        'hair-coloring'
+        # 'astronaut'
+        # 'block-tower'
+        # 'dance'
+        # 'emergency-service'
+        # 'gourmet-tuna'
+        # 'hair-coloring'
         # 'hand-pointing'
         # 'healthy-dish'
         # 'home-fragrance'
         # 'in-ear-headphones'
-        # 'pie-chart'
+        'pie-chart'
         # 'single-sneaker-on-white-background'
         # 'stop-sign'
         )
@@ -34,7 +34,7 @@ splits=(
 models=(
         'llava:7b' 
         'llava:13b' 
-        'llava:34b' 
+        # 'llava:34b' 
         'llava-llama3' 
         'bakllava' 
         # 'minicpm-v' 

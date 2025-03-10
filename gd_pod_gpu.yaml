@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata: 
-    name: ali-pod-gpu-a10-gd-3
+    name: ali-pod-gpu-a10-gd-1
 spec:
   affinity:
     nodeAffinity:

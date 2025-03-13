@@ -6,19 +6,20 @@ seed_end=5
 seed_variation=1
 
 model_size=(
-	# 'dino_small' 
-	# 'dino_base' 
-	'dino_large')
+	 'dino_small' 
+	 'dino_base' 
+	# 'dino_large'
+	)
 
 method=(
-	'unimatch_v2_wandb_wo_FA_normloss_gradient'
-        'unimatch_v2_wandb_gradient' 
-        'unimatch_v2_wandb_normloss_gradient' 
-        'unimatch_v2_wandb_normloss' 
-        #'unimatch_v2_wandb_wo_FA_gradient' 
-        #'unimatch_v2_wandb_wo_FA_normloss' 
-        #'unimatch_v2_wandb_wo_FA' 
-        #'unimatch_v2_wandb'
+	#'unimatch_v2_wandb_wo_FA_normloss_gradient'
+        #'unimatch_v2_wandb_gradient' 
+        #'unimatch_v2_wandb_normloss_gradient' 
+        #'unimatch_v2_wandb_normloss' 
+        'unimatch_v2_wandb_wo_FA_gradient' 
+        'unimatch_v2_wandb_wo_FA_normloss' 
+        'unimatch_v2_wandb_wo_FA' 
+        'unimatch_v2_wandb'
         )
 
 # Create jobs for each value in the range of seeds, model sizes, and methods
